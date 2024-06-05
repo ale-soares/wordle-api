@@ -1,22 +1,21 @@
 import { Request, Response } from "express";
 
 interface Word {
-  id: Number;
   size: Number;
   title: String;
 }
 
-const words: Array<Word> = [
-  { id: 0, size: 5, title: "pizza" },
-  { id: 1, size: 5, title: "quack" },
-  { id: 2, size: 5, title: "jumbo" },
-  { id: 3, size: 5, title: "juicy" },
-  { id: 4, size: 5, title: "crazy" },
-  { id: 5, size: 5, title: "frizz" },
-  { id: 6, size: 4, title: "jump" },
-  { id: 7, size: 4, title: "joke" },
-  { id: 8, size: 4, title: "zinc" },
-  { id: 9, size: 6, title: "jojoba" },
+let words: Array<Word> = [
+  { size: 5, title: "pizza" },
+  { size: 5, title: "quack" },
+  { size: 5, title: "jumbo" },
+  { size: 5, title: "juicy" },
+  { size: 5, title: "crazy" },
+  { size: 5, title: "frizz" },
+  { size: 4, title: "jump" },
+  { size: 4, title: "joke" },
+  { size: 4, title: "zinc" },
+  { size: 6, title: "jojoba" },
 ];
 
 const getWords = (req: Request, res: Response) => {
@@ -44,17 +43,42 @@ const getWordByLength = (req: Request, res: Response) => {
 };
 
 const addWord = (req: Request, res: Response) => {
-  let word: Word = {
-    id: req.body.id,
+  let newWord: Word = {
     size: req.body.size,
     title: req.body.title,
   };
 
-  words.push(word);
+  const word = words.find((word) => word.title === newWord.title);
+
+  if (word) {
+    return res.status(202).json({
+      message: "word is already registered",
+    });
+  }
+
+  words.push(newWord);
 
   return res.status(200).json({
     message: words,
   });
 };
 
-export default { getWords, getWord, getWordByLength, addWord };
+const deleteWord = (req: Request, res: Response) => {
+  const deleteTitle = req.params.title;
+  const word = words.find((word) => word.title === deleteTitle);
+
+  if (word) {
+    const id = words.indexOf(word);
+    words.splice(id, 1);
+
+    return res.status(200).json({
+      message: "word deleted successfully",
+    });
+  }
+
+  return res.status(404).json({
+    message: "word not found",
+  });
+};
+
+export default { getWords, getWord, getWordByLength, addWord, deleteWord };

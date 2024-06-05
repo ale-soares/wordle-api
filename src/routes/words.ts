@@ -3,7 +3,9 @@ import controller from "./../controllers/words";
 
 const router = express.Router();
 
+router.get("/words", controller.getWords);
 router.get("/word", controller.getWord);
 router.get("/word/:length", controller.getWordByLength);
+router.post("/words", controller.addWord);
 
 export default router;

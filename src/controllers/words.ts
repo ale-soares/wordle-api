@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Word, { IWord, TWord } from "./../models/word";
 
+const response = { 404: "Word not found" };
+
 const getWords = async (req: Request, res: Response) => {
   try {
     const words: IWord[] = await Word.find({});
@@ -31,6 +33,10 @@ const getWordByLength = async (req: Request, res: Response) => {
       { $match: { size: requiredLength } },
     ]).sample(1);
 
+    if (!word) {
+      return res.status(404).send(response[404]);
+    }
+
     res.send(word);
   } catch (error) {
     console.error(error);
@@ -46,13 +52,10 @@ const addWord = async (req: Request, res: Response) => {
     const dbWord = await Word.findOne<IWord>({ title: title });
 
     if (dbWord) {
-      return res
-        .status(304)
-        .send("This word has already been added to Database");
+      return res.status(304);
     }
 
     const newWord: TWord = { size, title };
-
     const word = new Word(newWord);
     await word.save();
 
@@ -68,6 +71,10 @@ const deleteWord = async (req: Request, res: Response) => {
 
   try {
     const word = await Word.findOneAndDelete<IWord>({ title: deleteTitle });
+
+    if (!word) {
+      return res.status(404).send(response[404]);
+    }
 
     res.send(word);
   } catch (error) {

@@ -1,11 +1,6 @@
 import { Request, Response } from "express";
 import Word from "./../models/word";
 
-interface Word {
-  size: Number;
-  title: String;
-}
-
 const getWords = async (req: Request, res: Response) => {
   try {
     const words = await Word.find({});
@@ -48,6 +43,14 @@ const addWord = async (req: Request, res: Response) => {
   const size = title.length;
 
   try {
+    const dbWord = await Word.findOne({ title: title });
+
+    if (dbWord) {
+      return res
+        .status(304)
+        .send("This word has already been added to Database");
+    }
+
     const word = new Word({ size, title });
     await word.save();
 

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import Word from "./../models/word";
+import Word, { IWord, TWord } from "./../models/word";
 
 const getWords = async (req: Request, res: Response) => {
   try {
-    const words = await Word.find({});
+    const words: IWord[] = await Word.find({});
 
     res.send(words);
   } catch (error) {
@@ -14,7 +14,7 @@ const getWords = async (req: Request, res: Response) => {
 
 const getWord = async (req: Request, res: Response) => {
   try {
-    const word = await Word.aggregate().sample(1);
+    const word = await Word.aggregate<IWord>().sample(1);
 
     res.send(word);
   } catch (error) {
@@ -27,7 +27,7 @@ const getWordByLength = async (req: Request, res: Response) => {
   const requiredLength = parseInt(req.params.size);
 
   try {
-    const word = await Word.aggregate([
+    const word = await Word.aggregate<IWord>([
       { $match: { size: requiredLength } },
     ]).sample(1);
 
@@ -43,7 +43,7 @@ const addWord = async (req: Request, res: Response) => {
   const size = title.length;
 
   try {
-    const dbWord = await Word.findOne({ title: title });
+    const dbWord = await Word.findOne<IWord>({ title: title });
 
     if (dbWord) {
       return res
@@ -51,7 +51,9 @@ const addWord = async (req: Request, res: Response) => {
         .send("This word has already been added to Database");
     }
 
-    const word = new Word({ size, title });
+    const newWord: TWord = { size, title };
+
+    const word = new Word(newWord);
     await word.save();
 
     res.send(word);
@@ -65,7 +67,7 @@ const deleteWord = async (req: Request, res: Response) => {
   const deleteTitle = req.params.title;
 
   try {
-    const word = await Word.findOneAndDelete({ title: deleteTitle });
+    const word = await Word.findOneAndDelete<IWord>({ title: deleteTitle });
 
     res.send(word);
   } catch (error) {

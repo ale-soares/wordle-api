@@ -1,6 +1,11 @@
-import mongoose from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
-const Schema = mongoose.Schema;
+export type TWord = {
+  size?: number;
+  title: string;
+};
+
+export interface IWord extends TWord, Document {}
 
 const WordSchema = new Schema({
   size: {
@@ -14,6 +19,6 @@ const WordSchema = new Schema({
   },
 });
 
-const Word = mongoose.model("Word", WordSchema);
+const Word = model<IWord>("User", WordSchema);
 
 export default Word;

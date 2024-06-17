@@ -29,6 +29,7 @@ API built for Wordle application. CRUD modeling words and their length. Allows r
 - [Getting random records from MongoDb with Mongoose.js](https://medium.com/@sahinkasap52/getting-random-records-from-mongodb-with-mongoose-js-29a598e8ec24)
 - [Typescript With MongoDB and Node/Express](https://medium.com/@haybams/typescript-with-mongoose-and-node-express-24073d51d2ee)
 - [Mongoose Node.js Express TypeScript application boilerplate with best practices for API development GitHub Repo](https://github.com/sunnysidelabs/mongoose-express-ts/blob/master/src/models/User.ts)
+- [Deploying Express Backend to Vercel](https://medium.com/@ShrianshAgarwal/deploying-express-backend-to-vercel-7664ef880005)
 
 <hr>
 <p>Made with ❤️ by me</p>

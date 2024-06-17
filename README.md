@@ -1,6 +1,6 @@
 # Wordle API
 
-[Live version not yet available](x)
+[Live version](https://wordle-api-lemon.vercel.app/)
 
 ## Overview 🎯
 
